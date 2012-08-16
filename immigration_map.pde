@@ -1,3 +1,5 @@
+import processing.pdf.*;
+
 import geomerative.*;
 import org.apache.batik.svggen.font.table.*;
 import org.apache.batik.svggen.font.*;
@@ -6,6 +8,8 @@ RSVG rsvg;
 RGroup usMap;
 
 State[] states;
+
+Fader animateFill;
 
 boolean drawFlag;
 
@@ -32,19 +36,7 @@ void setup() {
   	// create a new State obj in array with shape from SVG and corresponding name 
  	states[i] = new State( usMap.elements[i], stateMeta[i].getString( "id" ) );
  	}
-  
-  selectState( states, "CA").fillToPercent( 75 );
-  selectState( states, "NV").fillToPercent( 7 );
-  selectState( states, "TX").fillToPercent( 7 );
-  selectState( states, "AZ").fillToPercent( 6 );
-  selectState( states, "NJ").fillToPercent( 6 );
-  selectState( states, "MD").fillToPercent( 5 );
-  selectState( states, "FL").fillToPercent( 4 );
-  selectState( states, "GA").fillToPercent( 4 );
-  selectState( states, "OR").fillToPercent( 4 );
-  selectState( states, "DC").fillToPercent( 4 );
-  selectState( states, "NM").fillToPercent( 4 );
-  selectState( states, "IL").fillToPercent( 4 );
+  animateFill = new Fader(20);
   
   
   drawFlag = true;
@@ -55,18 +47,39 @@ void setup() {
 void draw() {
   
 if( drawFlag ) {
-	  /*
-	  for( State s : states ) {
-			s.fillToPercent( floor( 100 * random(1) ) );
-	  }
-	  */
+          float fader = animateFill.val();
+        
+          selectState( states, "CA").fillToPercent( fader * 75 );
+          selectState( states, "NV").fillToPercent( fader * 7 );
+          selectState( states, "TX").fillToPercent( fader * 76 );
+          selectState( states, "AZ").fillToPercent( fader * 6 );
+          selectState( states, "NJ").fillToPercent( fader * 6 );
+          selectState( states, "MD").fillToPercent( fader * 5 );
+          selectState( states, "FL").fillToPercent( fader * 10 );
+          selectState( states, "GA").fillToPercent( fader * 40 );
+          selectState( states, "OR").fillToPercent( fader * 35 );
+          selectState( states, "DC").fillToPercent( fader * 4 );
+          selectState( states, "NM").fillToPercent( fader * 13 );
+          selectState( states, "IL").fillToPercent( fader * 4 );
+          selectState( states, "LA").fillToPercent( fader * 95 );
+          selectState( states, "AR").fillToPercent( fader * 50 );
+          selectState( states, "ID").fillToPercent( fader * 50 );
+    
+  
+  
 	
 	  for( int s = 0; s < states.length; s++ ) {
-			println("drawing " + states[s].name);
+			//println("drawing " + states[s].name);
 			states[s].drawSlices();
 			states[s].drawBorders();
 	  }
-  drawFlag = false;
+
+  animateFill.increment();
+  
+  drawFlag = false;  
+  if( animateFill.val() <1 )
+      drawFlag = true;
+
   }
   
   
